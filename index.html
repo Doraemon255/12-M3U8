@@ -5,38 +5,74 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BLEEDBLUEARMY</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
+<!-- HLS.js -->
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-body {
-    margin: 0;
-    background: #000814;
-    color: #fff;
-    font-family: Arial, Helvetica, sans-serif;
+:root {
+  --blue: #1e40af;
+  --dark: #020617;
+  --accent: #38bdf8;
 }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--dark);
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+}
+
+/* Header */
 header {
-    padding: 12px;
-    text-align: center;
-    background: linear-gradient(90deg, #001d3d, #003566);
-    font-weight: bold;
-    letter-spacing: 2px;
+  text-align: center;
+  padding: 12px;
+  background: linear-gradient(90deg, #020617, var(--blue));
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-size: 18px;
 }
+
+/* Player */
+.player-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  background: black;
+}
+
 video {
-    width: 100%;
-    height: auto;
-    background: black;
+  width: 100%;
+  height: auto;
+  background: black;
 }
+
+/* Watermark */
+.watermark {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 12px;
+  opacity: 0.7;
+  background: rgba(0,0,0,0.6);
+  padding: 5px 8px;
+  border-radius: 6px;
+}
+
+/* Telegram Button */
 .telegram {
-    text-align: center;
-    margin: 15px 0;
+  text-align: center;
+  margin: 15px;
 }
+
 .telegram a {
-    color: #fff;
-    background: #229ED9;
-    padding: 10px 20px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-weight: bold;
+  background: #229ED9;
+  color: white;
+  padding: 10px 22px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 15px rgba(34,158,217,.6);
 }
 </style>
 </head>
@@ -45,51 +81,34 @@ video {
 
 <header>BLEEDBLUEARMY</header>
 
-<video id="video" controls autoplay muted></video>
+<div class="player-wrap">
+  <video id="video" controls autoplay muted playsinline></video>
+  <div class="watermark">@BLEEDBLUEARMY</div>
+</div>
 
 <div class="telegram">
-    <a href="https://t.me/+_WN9XxoZT8QxZmI1" target="_blank">
-        Join Telegram Channel
-    </a>
+  <a href="https://t.me/bleedbluearmy" target="_blank">
+    Join Telegram Channel
+  </a>
 </div>
 
 <script>
-async function initPlayer() {
-    if (!shaka.Player.isBrowserSupported()) {
-        alert("Browser not supported");
-        return;
-    }
+const video = document.getElementById('video');
 
-    const video = document.getElementById('video');
-    const player = new shaka.Player(video);
+// 👉 PUT YOUR M3U8 LINK HERE
+const source = "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd|cookie=__hdnea__=st=1772241887~exp=1772328287~acl=/*~hmac=c2276b495783dbb09e00bbbf9f38c98f7d06d932a86c8364b74b848141627e13&user-agent=iasked&drmScheme=clearkey&drmLicense=400131994b445d8c8817202248760fda:2d56cb6f07a75b9aff165d534ae2bfc4";
 
-    // ERROR HANDLING
-    player.addEventListener('error', e => {
-        console.error('Shaka Error', e.detail);
-        alert("Stream Error: check MPD or Key");
-    });
-
-    // 👇👇 PUT YOUR MPD URL HERE 👇👇
-    const mpdUrl = "https://otte.live.fly.ww.aiv-cdn.net/sin-nitro/live/clients/dash/enc/yqpb2usvdd/out/v1/ce95d81f287040d5a3fa6d4b145be849/cenc.mpd";
-
-    // 👇👇 PUT YOUR CLEARKEY HERE 👇👇
-    player.configure({
-        drm: {
-            clearKeys: {
-                "baafdb8ebcbbc0655332291da6f121da": "60ac892e0ea0b2c46fc6837c97ed641a"
-            }
-        }
-    });
-
-    try {
-        await player.load(mpdUrl);
-        console.log("Stream loaded successfully");
-    } catch (err) {
-        console.error("Load failed", err);
-    }
+if (Hls.isSupported()) {
+  const hls = new Hls({
+    maxBufferLength: 30,
+    maxMaxBufferLength: 60,
+    lowLatencyMode: true
+  });
+  hls.loadSource(source);
+  hls.attachMedia(video);
+} else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+  video.src = source;
 }
-
-document.addEventListener('DOMContentLoaded', initPlayer);
 </script>
 
 </body>
