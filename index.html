@@ -1,217 +1,587 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BLEEDBLUEARMY</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>BLEEDBLUEARMY</title>
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-<style>
+    <style>
+      :root {
+        --blue: #1e40af;
+        --dark: #020617;
+        --accent: #38bdf8;
+      }
 
-:root{
---blue:#1e40af;
---dark:#020617;
---accent:#38bdf8;
-}
+      body {
+        margin: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial,
+          sans-serif;
+        background: linear-gradient(180deg, #020617, #020617, #000);
+        color: white;
+        padding: 10px;
+      }
 
-body{
-margin:0;
-font-family:Arial;
-background:linear-gradient(180deg,#020617,#020617,#000);
-color:white;
-}
+      .main-container {
+        max-width: 600px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
 
-/* HEADER */
+      /* VIDEO PLAYER RESPONSIVE */
+      .player-wrap {
+        position: relative;
+        width: 100%;
+        background: black;
+        border-radius: 14px;
+        overflow: hidden;
+        padding-top: 56.25%;
+        border-bottom: 2px solid #1e40af;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+      }
 
-header{
-background:linear-gradient(90deg,#020617,#1e3a8a,#020617);
-text-align:center;
-padding:14px;
-font-size:20px;
-font-weight:bold;
-letter-spacing:2px;
-box-shadow:0 3px 20px rgba(0,0,0,.6);
-}
+      .player-wrap video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
 
-/* PLAYER */
+      video {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
 
-.player-wrap{
-position:relative;
-width:100%;
-background:black;
-border-bottom:2px solid #1e40af;
-}
+      /* HEADER */
+      header {
+        background: linear-gradient(90deg, #020617, #1e3a8a, #020617);
+        text-align: center;
+        padding: 14px;
+        font-size: 20px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        box-shadow: 0 3px 20px rgba(0, 0, 0, 0.6);
+      }
 
-video{
-width:100%;
-height:auto;
-}
+      /* LIVE BADGE & WATERMARK */
+      .live {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: red;
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: bold;
+        box-shadow: 0 0 10px red;
+        z-index: 10;
+      }
 
-/* LIVE BADGE */
+      .watermark {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        font-size: 12px;
+        opacity: 0.7;
+        background: rgba(0, 0, 0, 0.6);
+        padding: 5px 10px;
+        border-radius: 6px;
+        z-index: 10;
+      }
 
-.live{
-position:absolute;
-top:12px;
-left:12px;
-background:red;
-padding:5px 10px;
-border-radius:6px;
-font-size:12px;
-font-weight:bold;
-box-shadow:0 0 10px red;
-}
+      /* TELEGRAM BUTTON */
+      .telegram {
+        text-align: center;
+        margin: 15px 0;
+      }
 
-/* WATERMARK */
+      .telegram a {
+        background: #229ed9;
+        color: white;
+        padding: 12px 26px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 15px;
+        box-shadow: 0 0 15px rgba(34, 158, 217, 0.8);
+        transition: 0.3s;
+        display: inline-block;
+      }
 
-.watermark{
-position:absolute;
-top:12px;
-right:12px;
-font-size:12px;
-opacity:.7;
-background:rgba(0,0,0,.6);
-padding:5px 10px;
-border-radius:6px;
-}
+      .telegram a:hover {
+        transform: scale(1.08);
+      }
 
-/* TELEGRAM BUTTON */
+      /* COMMUNITY CARD SECTIONS */
+      .card {
+        background: linear-gradient(135deg, #0d6efd, #1a0ebd);
+        border-radius: 14px;
+        padding: 18px;
+        color: #fff;
+        text-align: center;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+      }
 
-.telegram{
-text-align:center;
-margin:20px;
-}
+      .combined-sections {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
 
-.telegram a{
-background:#229ED9;
-color:white;
-padding:12px 26px;
-border-radius:30px;
-text-decoration:none;
-font-weight:bold;
-font-size:15px;
-box-shadow:0 0 15px rgba(34,158,217,.8);
-transition:.3s;
-}
+      .combined-sections .card {
+        flex: 1;
+        min-width: 250px;
+      }
 
-.telegram a:hover{
-transform:scale(1.08);
-}
+      .community h3 {
+        margin: 0 0 14px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+        font-weight: 600;
+      }
 
-/* POPUP */
+      .buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+      }
 
-.popup{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.8);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:999;
-}
+      .btn {
+        flex: 1;
+        background: transparent;
+        border: 2px solid #fff;
+        border-radius: 30px;
+        padding: 10px;
+        color: #fff;
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: 0.3s;
+      }
 
-.popup-box{
-background:#020617;
-padding:25px;
-border-radius:12px;
-text-align:center;
-max-width:300px;
-box-shadow:0 0 25px rgba(0,0,0,.9);
-border:1px solid #1e40af;
-}
+      .btn:hover {
+        background: #fff;
+        color: #0d6efd;
+      }
 
-.popup-box h3{
-margin-top:0;
-}
+      .btn svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+      }
 
-.popup-btn{
-margin-top:15px;
-}
+      .share-btn {
+        background: transparent;
+        color: #fff;
+        border: 2px solid #fff;
+        border-radius: 30px;
+        padding: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        transition: 0.3s;
+        font-size: 14px;
+      }
 
-.join{
-background:#229ED9;
-padding:10px 20px;
-border:none;
-color:white;
-border-radius:20px;
-font-weight:bold;
-margin-right:10px;
-}
+      .share-btn:hover {
+        background: #fff;
+        color: #0d6efd;
+      }
 
-.cancel{
-background:#374151;
-padding:10px 20px;
-border:none;
-color:white;
-border-radius:20px;
-}
+      .photo-section {
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+        width: 100%;
+        margin-top: 15px;
+      }
 
-</style>
-</head>
+      .photo-item {
+        width: 100%;
+        height: 250px;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s;
+        display: block;
+      }
 
-<body>
+      .photo-item:hover {
+        transform: scale(1.02);
+      }
 
-<header>BLEEDBLUEARMY</header>
+      .photo-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
 
-<div class="player-wrap">
-<video id="video" controls autoplay muted playsinline></video>
+      /* POPUP */
+      .popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+      }
 
-<div class="live">LIVE</div>
-<div class="watermark">@BLEEDBLUEARMY</div>
-</div>
+      .popup-box {
+        background: #020617;
+        padding: 25px;
+        border-radius: 12px;
+        text-align: center;
+        max-width: 300px;
+        width: 90%;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.9);
+        border: 1px solid #1e40af;
+      }
 
-<div class="telegram">
-<a href="https://t.me/+_WN9XxoZT8QxZmI1" target="_blank">
-Join Telegram Channel
-</a>
-</div>
+      .popup-box h3 {
+        margin-top: 0;
+        font-size: 18px;
+      }
 
-<!-- POPUP -->
+      .popup-box p {
+        font-size: 14px;
+        margin: 10px 0;
+      }
 
-<div class="popup" id="popup">
-<div class="popup-box">
+      .popup-btn {
+        margin-top: 15px;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
 
-<h3>Join BLEEDBLUEARMY</h3>
-<p>For match updates & backup links join our Telegram channel.</p>
+      .join {
+        background: #229ed9;
+        padding: 10px 20px;
+        border: none;
+        color: white;
+        border-radius: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+        flex: 1;
+        min-width: 100px;
+      }
 
-<div class="popup-btn">
+      .join:hover {
+        background: #1a7fb8;
+      }
 
-<button class="join"
-onclick="window.open('https://t.me/+_WN9XxoZT8QxZmI1')">
-Join
-</button>
+      .cancel {
+        background: #374151;
+        padding: 10px 20px;
+        border: none;
+        color: white;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        flex: 1;
+        min-width: 100px;
+      }
 
-<button class="cancel"
-onclick="closePopup()">
-Cancel
-</button>
+      .cancel:hover {
+        background: #4b5563;
+      }
 
-</div>
-</div>
-</div>
+      /* RESPONSIVE DESIGN */
+      @media (max-width: 768px) {
+        .main-container {
+          max-width: 100%;
+          gap: 12px;
+        }
 
-<script>
+        .card {
+          padding: 16px;
+        }
 
-function closePopup(){
-document.getElementById("popup").style.display="none";
-}
+        header {
+          font-size: 18px;
+          padding: 12px;
+        }
 
-/* PLAYER */
+        .combined-sections {
+          flex-direction: column;
+          gap: 12px;
+        }
 
-const video=document.getElementById('video');
+        .combined-sections .card {
+          flex: 1;
+          min-width: unset;
+        }
 
-const source="https://use11.playlist.live-video.net/v1/playlist/CrwFMFBR12DSiO4xUAkMVWVWcZGmtzsU71IUEsCPGvRVbpKKK2ZBcejt1pnoi3e25Mljd75oHkKJxa2Dt8fX4L6hiEu4ikNzgcq0aKwwenvs7qt9acsPNeDbit6-j-k__f3Fm0_lC657o9SwqUmzgfCznJnuLwEY8c1iTCM48kbYiDAVVgBrAxqwyTgbH8SU737jgf3y8q7IuSbCRMXqgRtWUr1bgv9I9qTknAKRJ9R-Mo2tG5_KYfSUyoE73okQoc9Sz0dpFj0hn2PdnqlgjPQ6Iv8t9OJnGBUjBT_Qexm-Yl9S4FQpNShCYJmTVdv9Ly94depKBTG5oUZRd955Spsayuv5z6q-oQalu70FALWaDkpqgxEqdNXDlQR3n0IUfYkcNMY2s3PkRjeZ2rrQZF4Pme3kgWYUCqrEJXyqACvFn86uLLQ8dEz6cGlDRG6GjLmLbMNS9A2nAfQiMKVBc34lFJIrv6ek6TOi-z7wCzeagq7NQRh2PfJQiC_9YLvUCtyzpfsciCgsTgTEu_8sDTVNsG3HeAodlOGtLpOfa-aaqDnqD0PCRoQSohZ594rCvGCRXhjlq1TAo9klyC5sKQcBSXNfHvMVQ7WYofSTB7OGf6KDHxZHW6hafbKl5Ktibkz0XxJ9_yq2biy8gqE-rhS8X-oqxnb14FjbesJKLkQ9PrEEZPESEB96az9Kfti0LcM5wqc_ivafUrWw8WRnKY9I0ObMRKFKcIb5JWGW3L2qFel4v2eqc8HLVeaNP164pExTzjR4_hPWWLznrGiDuaCbsnQEJ4294bXfvgLIK29NS99Bj__g_dopPTd-6abxpewEccRu4xih5V9di9IQWQjhaL1WSrBgLin5L3VonM3aLgZjXD_YkaO2LVmlpAjWBXXqOBffNomrGRMsWITbx0C8BOQUFERVU-PmJAg6NhoMw-lFV-SKJEq94Yj8IAEqCXVzLWVhc3QtMjDLDg.m3u8";
+        .photo-item {
+          height: 200px;
+        }
+      }
 
-if(Hls.isSupported()){
-const hls=new Hls();
-hls.loadSource(source);
-hls.attachMedia(video);
-}
+      @media (max-width: 480px) {
+        body {
+          padding: 6px;
+        }
 
-</script>
+        .main-container {
+          gap: 10px;
+        }
 
-</body>
+        .card {
+          padding: 14px;
+          border-radius: 10px;
+        }
+
+        header {
+          font-size: 16px;
+          padding: 10px;
+          letter-spacing: 1px;
+        }
+
+        .community h3 {
+          font-size: 14px;
+          margin: 0 0 10px;
+          gap: 6px;
+        }
+
+        .buttons {
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .btn {
+          padding: 8px;
+          font-size: 12px;
+          border-radius: 25px;
+        }
+
+        .btn svg {
+          width: 16px;
+          height: 16px;
+        }
+
+        .share-btn {
+          padding: 8px;
+          font-size: 12px;
+          border-radius: 25px;
+        }
+
+        .telegram {
+          margin: 10px 0;
+        }
+
+        .telegram a {
+          padding: 10px 20px;
+          font-size: 13px;
+        }
+
+        .live {
+          font-size: 11px;
+          padding: 4px 8px;
+        }
+
+        .watermark {
+          font-size: 11px;
+          padding: 4px 8px;
+        }
+
+        .photo-item {
+          height: 180px;
+          border-radius: 10px;
+        }
+
+        .popup-box {
+          max-width: 90%;
+          padding: 20px;
+        }
+
+        .popup-box h3 {
+          font-size: 16px;
+        }
+
+        .popup-btn {
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .join,
+        .cancel {
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .main-container {
+          gap: 8px;
+        }
+
+        .card {
+          padding: 12px;
+          border-radius: 8px;
+        }
+
+        header {
+          font-size: 14px;
+          padding: 8px;
+        }
+
+        .community h3 {
+          font-size: 13px;
+          margin: 0 0 8px;
+        }
+
+        .btn {
+          padding: 6px;
+          font-size: 11px;
+        }
+
+        .share-btn {
+          padding: 6px;
+          font-size: 11px;
+          border-radius: 20px;
+        }
+
+        .photo-item {
+          height: 150px;
+        }
+
+        .telegram a {
+          padding: 8px 16px;
+          font-size: 12px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>BLEEDBLUEARMY</header>
+
+    <div class="main-container">
+      <div class="player-wrap">
+        <video
+          id="video"
+          controls
+          autoplay
+          muted
+          playsinline></video>
+
+        <div class="live">LIVE</div>
+        <div class="watermark">@BLEEDBLUEARMY</div>
+      </div>
+
+      <div class="combined-sections">
+        <div class="card community">
+          <h3>Join our community for live updates!</h3>
+          <div class="buttons">
+            <a
+              href="https://t.me/+_WN9XxoZT8QxZmI1"
+              class="btn">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M9.04 15.47l-.4 5.65c.57 0 .82-.25 1.13-.55l2.72-2.6 5.64 4.13c1.03.57 1.76.27 2.04-.95l3.7-17.37c.36-1.65-.6-2.3-1.6-1.92L1.66 9.74c-1.58.61-1.55 1.5-.27 1.9l5.58 1.74L19.46 5.6c.58-.36 1.1-.16.67.2"></path>
+              </svg>
+              Telegram
+            </a>
+          </div>
+        </div>
+
+        <div class="card community">
+          <h3>Copy Link & Open In Chrome Browser Only</h3>
+          <button
+            class="share-btn"
+            id="shareBtn">
+            Share This Page Link
+          </button>
+        </div>
+      </div>
+
+      <div class="photo-section">
+        <a
+          href="#"
+          class="photo-item"
+          id="photoLink">
+          <img
+            src=""
+            alt="Banner Photo"
+            id="photoImg" />
+        </a>
+      </div>
+    </div>
+
+    <!-- POPUP -->
+    <div
+      class="popup"
+      id="popup">
+      <div class="popup-box">
+        <h3>Join BLEEDBLUEARMY</h3>
+        <p>For match updates & backup links join our Telegram channel.</p>
+
+        <div class="popup-btn">
+          <button
+            class="join"
+            onclick="window.open('https://t.me/+_WN9XxoZT8QxZmI1')">
+            Join
+          </button>
+
+          <button
+            class="cancel"
+            onclick="closePopup()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function closePopup() {
+        document.getElementById("popup").style.display = "none";
+      }
+
+      // Share button functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        const shareBtn = document.getElementById("shareBtn");
+        if (shareBtn) {
+          shareBtn.addEventListener("click", function () {
+            navigator.clipboard
+              .writeText(window.location.href)
+              .then(() => alert("Link Copied!"))
+              .catch(() => alert("Failed to copy link"));
+          });
+        }
+      });
+
+      /* PLAYER */
+
+      const video = document.getElementById("video");
+
+      const source =
+        "https://use11.playlist.live-video.net/v1/playlist/CrwFMFBR12DSiO4xUAkMVWVWcZGmtzsU71IUEsCPGvRVbpKKK2ZBcejt1pnoi3e25Mljd75oHkKJxa2Dt8fX4L6hiEu4ikNzgcq0aKwwenvs7qt9acsPNeDbit6-j-k__f3Fm0_lC657o9SwqUmzgfCznJnuLwEY8c1iTCM48kbYiDAVVgBrAxqwyTgbH8SU737jgf3y8q7IuSbCRMXqgRtWUr1bgv9I9qTknAKRJ9R-Mo2tG5_KYfSUyoE73okQoc9Sz0dpFj0hn2PdnqlgjPQ6Iv8t9OJnGBUjBT_Qexm-Yl9S4FQpNShCYJmTVdv9Ly94depKBTG5oUZRd955Spsayuv5z6q-oQalu70FALWaDkpqgxEqdNXDlQR3n0IUfYkcNMY2s3PkRjeZ2rrQZF4Pme3kgWYUCqrEJXyqACvFn86uLLQ8dEz6cGlDRG6GjLmLbMNS9A2nAfQiMKVBc34lFJIrv6ek6TOi-z7wCzeagq7NQRh2PfJQiC_9YLvUCtyzpfsciCgsTgTEu_8sDTVNsG3HeAodlOGtLpOfa-aaqDnqD0PCRoQSohZ594rCvGCRXhjlq1TAo9klyC5sKQcBSXNfHvMVQ7WYofSTB7OGf6KDHxZHW6hafbKl5Ktibkz0XxJ9_yq2biy8gqE-rhS8X-oqxnb14FjbesJKLkQ9PrEEZPESEB96az9Kfti0LcM5wqc_ivafUrWw8WRnKY9I0ObMRKFKcIb5JWGW3L2qFel4v2eqc8HLVeaNP164pExTzjR4_hPWWLznrGiDuaCbsnQEJ4294bXfvgLIK29NS99Bj__g_dopPTd-6abxpewEccRu4xih5V9di9IQWQjhaL1WSrBgLin5L3VonM3aLgZjXD_YkaO2LVmlpAjWBXXqOBffNomrGRMsWITbx0C8BOQUFERVU-PmJAg6NhoMw-lFV-SKJEq94Yj8IAEqCXVzLWVhc3QtMjDLDg.m3u8";
+
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(source);
+        hls.attachMedia(video);
+      }
+    </script>
+  </body>
 </html>
